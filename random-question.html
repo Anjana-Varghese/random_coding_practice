@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Random Coding Question Picker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: #f4f4f4;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Random Coding Question Picker</h1>
+    <button onclick="pickRandomQuestion()">Get Question</button>
+    <a id="questionLink" href="#" target="_blank"></a>
+
+    <script>
+        const questionPool = [
+            "https://leetcode.com/problems/majority-element/",
+            "https://leetcode.com/problems/find-missing-and-repeated-values",
+            "https://leetcode.com/problems/merge-sorted-array/",
+            "https://leetcode.com/problems/single-number/"
+        ];
+
+        function pickRandomQuestion() {
+            const randomIndex = Math.floor(Math.random() * questionPool.length);
+            const question = questionPool[randomIndex];
+            const linkElement = document.getElementById("questionLink");
+            linkElement.href = question;
+            linkElement.textContent = "Click here for your question";
+        }
+    </script>
+
+</body>
+</html>
