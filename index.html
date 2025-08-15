@@ -18,9 +18,14 @@
             font-size: 16px;
             border-radius: 8px;
             cursor: pointer;
+            margin: 10px;
         }
-        button:hover {
+        button:hover:enabled {
             background-color: #45a049;
+        }
+        button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
         }
         a {
             display: block;
@@ -37,24 +42,63 @@
 <body>
 
     <h1>Random Coding Question Picker</h1>
-    <button onclick="pickRandomQuestion()">Get Question</button>
+    <button id="getQuestionBtn" onclick="pickRandomQuestion()">Get Question</button>
     <a id="questionLink" href="#" target="_blank"></a>
+    <button id="submitBtn" onclick="submitAnswer()" disabled>Submit Answer</button>
 
     <script>
         const questionPool = [
             "https://leetcode.com/problems/majority-element/",
-            "https://leetcode.com/problems/find-missing-and-repeated-values",
+            "https://leetcode.com/problems/find-missing-and-repeated-values/",
             "https://leetcode.com/problems/merge-sorted-array/",
             "https://leetcode.com/problems/single-number/"
         ];
 
+        let hasQuestion = false;
+        let answered = false;
+
         function pickRandomQuestion() {
+            if (hasQuestion) return; // Prevent multiple questions before answer
+
             const randomIndex = Math.floor(Math.random() * questionPool.length);
             const question = questionPool[randomIndex];
             const linkElement = document.getElementById("questionLink");
             linkElement.href = question;
             linkElement.textContent = "Click here for your question";
+
+            hasQuestion = true;
+            answered = false;
+
+            // Disable Get Question until answer is submitted
+            document.getElementById("getQuestionBtn").disabled = true;
+            document.getElementById("submitBtn").disabled = false;
         }
+
+        function submitAnswer() {
+            answered = true;
+            hasQuestion = false;
+
+            document.getElementById("getQuestionBtn").disabled = false;
+            document.getElementById("submitBtn").disabled = true;
+            document.getElementById("questionLink").textContent = "";
+            document.getElementById("questionLink").href = "#";
+
+            alert("Answer submitted! You can now get a new question.");
+        }
+
+        // Prevent going back
+        history.pushState(null, "", location.href);
+        window.onpopstate = function () {
+            history.pushState(null, "", location.href);
+            alert("You cannot go back until you answer!");
+        };
+
+        // Warn before leaving if unanswered
+        window.onbeforeunload = function () {
+            if (hasQuestion && !answered) {
+                return "You have not submitted your answer yet. Are you sure you want to leave?";
+            }
+        };
     </script>
 
 </body>
